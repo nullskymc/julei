@@ -39,7 +39,7 @@ fangjie[:, :, 2] = 0
 #粘土为玫红色
 niantu[:, :, 0] = 152
 niantu[:, :, 1] = 125
-
+a
 #将分类结果叠加到原图上
 img = cv2.add(img, shiying)
 img = cv2.add(img, changshi)
