@@ -10,8 +10,8 @@ gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 # 对图像进行降噪
 denoised_img = cv2.fastNlMeansDenoising(gray_img, None, 10, 7, 21)
 
-# 将图像转换为一维数组
-data = denoised_img.reshape((-1, 1))
+# 将图像转换为一维数组，并将数据类型转换为np.float32
+data = denoised_img.reshape((-1, 1)).astype(np.float32)
 
 # 进行K-Means聚类
 k = 5
@@ -42,11 +42,11 @@ for i in range(k):
         kongxi[mask] = 255
 
 # 将分类结果转换为彩色图像
-shiying = cv2.cvtColor(shiying, cv2.COLOR_GRAY2BGR)
-changshi = cv2.cvtColor(changshi, cv2.COLOR_GRAY2BGR)
-fangjie = cv2.cvtColor(fangjie, cv2.COLOR_GRAY2BGR)
-niantu = cv2.cvtColor(niantu, cv2.COLOR_GRAY2BGR)
-kongxi = cv2.cvtColor(kongxi, cv2.COLOR_GRAY2BGR)
+shiying = cv2.cvtColor(shiying.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+changshi = cv2.cvtColor(changshi.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+fangjie = cv2.cvtColor(fangjie.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+niantu = cv2.cvtColor(niantu.astype(np.uint8), cv2.COLOR_GRAY2BGR)
+kongxi = cv2.cvtColor(kongxi.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 
 # 使用不同颜色输出分类的结果
 #石英为红色
@@ -68,18 +68,6 @@ img = cv2.add(img, changshi)
 img = cv2.add(img, fangjie)
 img = cv2.add(img, niantu)
 img = cv2.add(img, kongxi)
-
-# 创建保存分类结果的文件夹
-if not os.path.exists('./dataset/shiying'):
-    os.makedirs('./dataset/shiying')
-if not os.path.exists('./dataset/changshi'):
-    os.makedirs('./dataset/changshi')
-if not os.path.exists('./dataset/fangjie'):
-    os.makedirs('./dataset/fangjie')
-if not os.path.exists('./dataset/niantu'):
-    os.makedirs('./dataset/niantu')
-if not os.path.exists('./dataset/kongxi'):
-    os.makedirs('./dataset/kongxi')
 
 # 保存分类结果图片到对应的文件夹
 cv2.imwrite('./dataset/shiying/Top-0001_shiying.bmp', shiying)
