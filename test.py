@@ -11,14 +11,13 @@ gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
 # 将 thresh 转换为浮点数类型
-thresh = float(thresh.item())
 
 # 根据各种矿物的阈值范围进行分类
 shiying = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY)[1]
 changshi = cv2.threshold(gray, 100, 200, cv2.THRESH_BINARY)[1]
+niantu = cv2.threshold(gray, 120, 200, cv2.THRESH_BINARY)[1]
 fangjie = cv2.threshold(gray, 60, 100, cv2.THRESH_BINARY)[1]
-niantu = cv2.threshold(gray, thresh, 60, cv2.THRESH_BINARY)[1]
-kongxi = cv2.threshold(gray, 0, thresh, cv2.THRESH_BINARY)[1]
+kongxi = cv2.threshold(gray, 0, 60, cv2.THRESH_BINARY)[1]
 
 # 将分类结果转换为彩色图像
 shiying = cv2.cvtColor(shiying, cv2.COLOR_GRAY2BGR)
