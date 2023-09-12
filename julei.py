@@ -1,22 +1,23 @@
 import cv2
 import numpy as np
+from sklearn.mixture import GaussianMixture
 
-# 加载图像
+# 读取图像
 img = cv2.imread('./dataset/Top-0001.bmp')
 
 # 将图像转换为灰度图像
 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-# 对图像进行降噪
+# 对灰度图像进行预处理
 denoised_img = cv2.fastNlMeansDenoising(gray_img, None, 10, 7, 21)
 
-# 将图像转换为一维数组，并将数据类型转换为np.float32
-data = denoised_img.reshape((-1, 1)).astype(np.float32)
+# 将图像转换为一维数组
+data = denoised_img.reshape(-1, 1)
 
-# 进行K-Means聚类
-k = 5
-criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
-_, labels, centers = cv2.kmeans(data, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+# 使用高斯混合模型聚类算法进行聚类
+gmm = GaussianMixture(n_components=5)
+gmm.fit(data)
+labels = gmm.predict(data)
 
 # 将聚类结果转换为图像
 segmented_img = labels.reshape(denoised_img.shape)
@@ -28,15 +29,15 @@ niantu = np.zeros_like(segmented_img)
 kongxi = np.zeros_like(segmented_img)
 changshi = np.zeros_like(segmented_img)
 
-for i in range(k):
+for i in np.unique(segmented_img):
     mask = segmented_img == i
-    if np.mean(gray_img[mask]) > 220:
+    if np.mean(gray_img[mask]) > 190:
         fangjie[mask] = 255
-    elif np.mean(gray_img[mask]) > 100:
-        shiying[mask] = 255
-    elif np.mean(gray_img[mask]) > 85:
+    elif np.mean(gray_img[mask]) > 124.8:
         changshi[mask] = 255
-    elif np.mean(gray_img[mask]) > 46:
+    elif np.mean(gray_img[mask]) > 120:
+        shiying[mask] = 255
+    elif np.mean(gray_img[mask]) > 55:
         niantu[mask] = 255
     else:
         kongxi[mask] = 255
@@ -48,16 +49,7 @@ niantu = cv2.cvtColor(niantu.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 kongxi = cv2.cvtColor(kongxi.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 changshi = cv2.cvtColor(changshi.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 
-# 使用不同颜色输出分类的结果
-#石英为红色
-fangjie[:, :, 0] = 0
-fangjie[:, :, 1] = 0
-#长石为绿色
-shiying[:, :, 0] = 0
-shiying[:, :, 2] = 0
-#方解石为蓝色
-fangjie[:, :, 1] = 0
-fangjie[:, :, 2] = 0
+
 
 # 将分类结果叠加到原图上
 img = cv2.add(img, fangjie)
