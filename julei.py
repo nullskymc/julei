@@ -48,21 +48,27 @@ niantu = cv2.cvtColor(niantu.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 kongxi = cv2.cvtColor(kongxi.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 changshi = cv2.cvtColor(changshi.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 
-# 将结果上色
-fangjie[:, :, 0] = 255
-shiying[:, :, 1] = 255
-niantu[:, :, 2] = 255
-kongxi[:, :, 0] = 255
-kongxi[:, :, 1] = 255
-changshi[:, :, 0] = 255
-changshi[:, :, 2] = 255
-
 # 将分类结果叠加到原图上
 img = cv2.add(img, fangjie)
 img = cv2.add(img, shiying)
 img = cv2.add(img, niantu)
 img = cv2.add(img, kongxi)
 img = cv2.add(img, changshi)
+
+#创建保存文件夹
+import os
+if not os.path.exists('./output'):
+    os.mkdir('./output')
+if not os.path.exists('./output/fangjie'):
+    os.mkdir('./output/fangjie')
+if not os.path.exists('./output/shiying'):
+    os.mkdir('./output/shiying')
+if not os.path.exists('./output/niantu'):
+    os.mkdir('./output/niantu')
+if not os.path.exists('./output/kongxi'):
+    os.mkdir('./output/kongxi')
+if not os.path.exists('./output/changshi'):
+    os.mkdir('./output/changshi')
 
 # 保存分类结果图片到对应的文件夹
 cv2.imwrite('./output/fangjie/Top-0001_fangjie.bmp', fangjie)
