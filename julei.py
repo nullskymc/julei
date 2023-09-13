@@ -48,6 +48,23 @@ niantu = cv2.cvtColor(niantu.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 kongxi = cv2.cvtColor(kongxi.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 changshi = cv2.cvtColor(changshi.astype(np.uint8), cv2.COLOR_GRAY2BGR)
 
+#对结果上色
+fangjie[:, :, 0] = 0
+
+shiying[:, :, 0] = 0
+
+niantu[:, :, 0] = 0
+niantu[:, :, 1] = 0
+
+kongxi[:, :, 0] = 0
+kongxi[:, :, 1] = 0
+kongxi[:, :, 2] = 0
+
+changshi[:, :, 1] = 0
+changshi[:, :, 2] = 0
+
+
+
 # 将分类结果叠加到原图上
 img = cv2.add(img, fangjie)
 img = cv2.add(img, shiying)
