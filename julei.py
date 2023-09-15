@@ -28,6 +28,15 @@ niantu = np.zeros_like(segmented_img)
 kongxi = np.zeros_like(segmented_img)
 changshi = np.zeros_like(segmented_img)
 
+segmented_img = segmented_img.astype(np.uint8)
+# 使用开运算去除孤立区域
+open_mask = np.ones((3, 3), np.uint8)
+segmented_img = cv2.morphologyEx(segmented_img, cv2.MORPH_OPEN, open_mask)
+
+# 使用闭运算填充
+close_mask = np.ones((3, 3), np.uint8)
+segmented_img = cv2.morphologyEx(segmented_img, cv2.MORPH_CLOSE, close_mask)
+
 for i in range(kmeans.n_clusters):
     mask = segmented_img == i
     if i == 0:
@@ -71,6 +80,7 @@ img = cv2.add(img, shiying)
 img = cv2.add(img, niantu)
 img = cv2.add(img, kongxi)
 img = cv2.add(img, changshi)
+
 
 #创建保存文件夹
 import os
